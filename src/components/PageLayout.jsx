@@ -44,17 +44,10 @@ export const PageLayout = (props) => {
 
     return (
         <>
-            {/* <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3"></nav> */}
             <div className="header">
                 <Navbar
-                    // expand="true"
-                    // bg="light"
-                    // variant="dark"
                     fixed="top"
-                    // collapseOnSelect
-                    className="navbar navbar-expand-lg navbar-light bg-light mb-3 justify-content-between"
-                // className={`navbar d-flex align-items-center justify-content-between`}
-                >
+                    className="navbar navbar-expand-lg navbar-light bg-light mb-3 justify-content-between">
                     <a className="navbar-brand" href="/">MSAL React Tutorial</a>
 
                     <div className="text-right float-right">
@@ -84,7 +77,6 @@ export const PageLayout = (props) => {
 
                     </div>
                 </Navbar>
-
 
             </div >
             <h5><center>Welcome to the Microsoft Authentication Library For React Tutorial</center></h5>

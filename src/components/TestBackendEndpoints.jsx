@@ -5,7 +5,7 @@ export const TestBackendEndpoints = (props) => {
 
     const [response, setResponse] = useState(null);
     const onClickHandler = () => {
-        get("/hello").then(response => {
+        get("hello").then(response => {
             setResponse(response.data);
         })
             .catch(error => {

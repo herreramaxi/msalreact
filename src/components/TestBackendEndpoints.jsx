@@ -1,5 +1,6 @@
 import { get } from "./Api";
 import React, { useState } from "react";
+import { ApexChart } from "./ApexChart";
 
 export const TestBackendEndpoints = (props) => {
 
@@ -17,5 +18,6 @@ export const TestBackendEndpoints = (props) => {
         <h1>Test backend endpoints</h1>
         <button onClick={onClickHandler}>Send request</button>
         <h6>Response: <span>{response}</span></h6>
+        <ApexChart></ApexChart>
     </>);
 }

@@ -7,9 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./authConfig";
+import axios from 'axios';
 
-console.log(msalConfig.auth.clientId);
-console.log(msalConfig.auth.redirectUri);
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+
 const msalInstance = new PublicClientApplication(msalConfig);
 
 ReactDOM.render(

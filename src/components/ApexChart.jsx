@@ -1,96 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { get } from "./Api";
 
-export class ApexChart extends React.Component {
+export const ApexChart = (props) => {
 
-    constructor(props) {
-        super(props);
+    const [data, setData] = useState(null);
 
-        let ts2 = 1484418600000;
-        let dates = [];
-        const max = 40;
-        const min = -10;
-        for (let i = 0; i < 120; i++) {
-            ts2 = ts2 + 86400000;
+    useEffect(() => {
+        get("/getTemperatureSamples").then(r => {
+            setData(r.data.map(x => [x.sampleDate, x.value]));
+        });
 
-            dates.push([ts2, Math.random() * (max - min) + min]);
-        }
+    }, [setData])
 
-        this.state = {
-
-            series: [{
-                name: "Temperature",
-                data: dates
-            }],
-            options: {
-                chart: {
-                    type: "area",
-                    stacked: false,
-                    height: 350,
-                    zoom: {
-                        type: "x",
-                        enabled: true,
-                        autoScaleYaxis: true
-                    },
-                    toolbar: {
-                        autoSelected: "zoom"
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                markers: {
-                    size: 0,
-                },
-                title: {
-                    text: "Temperature",
-                    align: "left"
-                },
-                fill: {
-                    type: "gradient",
-                    gradient: {
-                        shadeIntensity: 1,
-                        inverseColors: false,
-                        opacityFrom: 0.5,
-                        opacityTo: 0,
-                        stops: [0, 90, 100]
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        formatter: function (val) {
-                            return (val).toFixed(2);
-                        },
-                    },
-                    title: {
-                        text: "Price"
-                    },
-                },
-                xaxis: {
-                    type: "datetime",
-                },
-                tooltip: {
-                    shared: false,
-                    y: {
-                        formatter: function (val) {
-                            return (val).toFixed(2)
-                        }
-                    }
-                }
+    const options = {
+        chart: {
+            type: "area",
+            stacked: false,
+            height: 350,
+            zoom: {
+                type: "x",
+                enabled: true,
+                autoScaleYaxis: true
             },
-
-
-        };
-    }
-
-
-
-    render() {
-        return (
-
-
-            <div id="chart">
-                <ReactApexChart options={this.state.options} series={this.state.series} type="area" height={350} />
-            </div>)
+            toolbar: {
+                autoSelected: "zoom"
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        markers: {
+            size: 0,
+        },
+        title: {
+            text: "Temperature",
+            align: "left"
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100]
+            },
+        },
+        yaxis: {
+            labels: {
+                formatter: function (val) {
+                    return (val).toFixed(2);
+                },
+            },
+            title: {
+                text: "temperature"
+            },
+        },
+        xaxis: {
+            type: "datetime",
+        },
+        tooltip: {
+            shared: false,
+            y: {
+                formatter: function (val) {
+                    return (val).toFixed(2)
+                }
+            }
+        }
     };
-}
+
+    var series = [{
+        name: "Temperature",
+        data: data
+    }];
+
+    return (<div id="chart">
+
+
+        {data && <ReactApexChart options={options} series={[{
+            name: "Temperature",
+            data: data
+        }]} type="area" height={350} />}
+
+        {!data && <div>no data available</div>}
+    </div>);
+
+};

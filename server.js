@@ -33,7 +33,8 @@ app.get('/getTemperatureSamples', (req, res) => {
         res.send(r);
     })
         .catch(e => {
-            res.send(e);
+            console.log(e);
+            res.status(500).send("Error when tring to retrieve temperature samples");
         });
 
 });

@@ -1,11 +1,17 @@
+import Tooltip from '@material-ui/core/Tooltip';
 import { useMsal } from "@azure/msal-react";
 import { getProfilePhoto } from "graph";
 import React, { useEffect, useState } from "react"
 import { loginRequest } from "../authConfig";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { useIsAuthenticated } from "@azure/msal-react";
+
+
 export const ProfileImage = (props) => {
     const { instance, accounts } = useMsal();
     const [profilePicture, setProfilePicture] = useState(null);
-    const name = accounts[0] && accounts[0].name;
+    const name = (accounts[0] && accounts[0].name) ?? null;
+    const isAuthenticated = useIsAuthenticated();
 
     const profileImage = {
         width: "40px",
@@ -55,6 +61,13 @@ export const ProfileImage = (props) => {
     }, [accounts, instance])
 
     return (<div>
-        {profilePicture && <img alt="profile" style={profileImage} src={profilePicture}></img>}
+
+
+        {profilePicture &&
+            <Tooltip title={name}>
+                <img alt="profile" style={profileImage} src={profilePicture}></img>
+            </Tooltip >}
+        {!profilePicture && <AccountCircleIcon />}
+
     </div>)
 }

@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { get } from "./Api";
+import { TemperatureTable } from "./TemperatureTable";
+import useInterval from 'react-useinterval';
+import Moment from 'moment';
 
 export const ApexChart = (props) => {
 
     const [data, setData] = useState(null);
 
     useEffect(() => {
+        getFromApi();
+    }, []);
+
+    const getFromApi = () => {
         get("/getTemperatureSamples").then(r => {
+            if (!r?.data) return;
             setData(r.data.map(x => [x.sampleDate, x.value]));
         });
+    }
 
-    }, [setData])
+    useInterval(getFromApi, 5000);
+
 
     const options = {
         chart: {
@@ -34,8 +44,8 @@ export const ApexChart = (props) => {
             size: 0,
         },
         title: {
-            text: "Temperature",
-            align: "left"
+            // text: "Temperature",            
+            // align: "left"
         },
         fill: {
             type: "gradient",
@@ -59,6 +69,11 @@ export const ApexChart = (props) => {
         },
         xaxis: {
             type: "datetime",
+            // labels: {
+            //     formatter: function (val) {
+            //         return Moment(val).format("ddd-MM hh:mm")
+            //     },
+            // },
         },
         tooltip: {
             shared: false,
@@ -75,15 +90,21 @@ export const ApexChart = (props) => {
         data: data
     }];
 
-    return (<div id="chart">
+    return (<Fragment>
+        {data &&
+            <>
+                <h3>Time series chart</h3>
+                <ReactApexChart options={options} series={[{
+                    name: "Temperature",
+                    data: data
+                }]} type="area" height={350} />
+                <TemperatureTable samples={data}></TemperatureTable>
+            </>
+        }
 
+        {/* {data && <TemperatureTable samples={data}></TemperatureTable>} */}
 
-        {data && <ReactApexChart options={options} series={[{
-            name: "Temperature",
-            data: data
-        }]} type="area" height={350} />}
-
-        {!data && <div>no data available</div>}
-    </div>);
+        {!data && <p>no data available</p>}
+    </Fragment>);
 
 };

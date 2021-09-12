@@ -3,7 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useIsAuthenticated } from "@azure/msal-react";
 import { useMsal } from "@azure/msal-react";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Button, Menu, MenuItem } from "@material-ui/core";
+import { Button, Container, Menu, MenuItem } from "@material-ui/core";
 import { loginRequest } from "../authConfig";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { ProfileImage } from "./ProfileImage";
@@ -47,18 +47,15 @@ export const PageLayout = (props) => {
             <div className="header">
                 <Navbar
                     fixed="top"
-                    className="navbar navbar-expand-lg navbar-light bg-light mb-3 justify-content-between">
-                    <a className="navbar-brand" href="/">MSAL React Tutorial</a>
+                    expand={true}
+                    expanded={true}
+                    className="navbar navbar-expand-lg navbar-light bg-light mb-3 justify-content-between position-sticky">
+                    <a className="navbar-brand" href="/">MSAL React</a>
 
                     <div className="text-right float-right">
                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                             <MoreVertIcon />
-                            <UnauthenticatedTemplate>
-                                <AccountCircleIcon />
-                            </UnauthenticatedTemplate>
-                            <AuthenticatedTemplate>
-                                <ProfileImage></ProfileImage>
-                            </AuthenticatedTemplate>
+                            <ProfileImage></ProfileImage>
                         </Button>
                         <Menu
                             id="simple-menu"
@@ -79,10 +76,9 @@ export const PageLayout = (props) => {
                 </Navbar>
 
             </div >
-            <h5><center>Welcome to the Microsoft Authentication Library For React Tutorial</center></h5>
-            <br />
-            <br />
-            {props.children}
+            <Container>
+                {props.children}
+            </Container>
         </>
     );
 };
